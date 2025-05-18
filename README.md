@@ -1,5 +1,6 @@
 # Ex. No:1b 			Study of Client Server Chat Applications
-
+## Name: Enbanathan v
+## Reg No: 212224220027
 ## Aim: 
 To perform a study on Client Server Chat Applications
 ## Introduction:
@@ -73,6 +74,64 @@ Client-server chat applications are versatile tools that facilitate real-time co
 
 Client-server chat applications are foundational to real-time communication over networks. They incorporate principles of socket programming, communication protocols, and security mechanisms to provide a seamless user experience. Understanding the basics of client-server chat applications is essential for developers involved in networked application development, as they form the backbone of various collaborative communication systems. As technology evolves, chat applications continue to adapt, incorporating new features and technologies to enhance user interaction and connectivity.
 
+## Program:
+## Client
+```
+
+import socket
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client.connect(("localhost", 9999))
+done=False
+while not done:
+    client.send(input("Message ").encode('utf-8'))
+    msg = client.recv(1024).decode('utf-8')
+    if msg == 'quit':
+        done=True
+    else:
+        print(msg)
+client.close()
+```
+### Sever
+```
+import socket
+
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.bind(('localhost', 9999))
+server.listen()
+print("Server is listening on port 9999...")
+
+client, addr = server.accept()
+print(f"Connection from {addr} has been established.")
+done = False
+
+while not done:
+    try:
+        msg = client.recv(1024).decode('utf-8')
+        if msg.lower() == 'quit':
+            print("Client ended the chat.")
+            done = True
+        else:
+            print(f"Client: {msg}")
+            response = input("Server: ")
+            client.send(response.encode('utf-8'))
+
+            if response.lower() == 'quit':
+                print("You ended the chat.")
+                done = True
+    except ConnectionResetError:
+        print("Client disconnected unexpectedly.")
+        done = True
+    except ConnectionAbortedError:
+        print("Connection aborted.")
+        done = True
+
+client.close()
+server.close()
+```
+## Output:
+
+![alt text](<Screenshot 2025-05-18 064606.png>)
+![alt text](<Screenshot 2025-05-18 064617.png>)
 
 ## Result:
 
